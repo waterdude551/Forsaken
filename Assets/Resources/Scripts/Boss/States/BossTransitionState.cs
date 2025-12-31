@@ -1,14 +1,24 @@
 using UnityEngine;
-public class BossPhaseOneIntroState : State
+public class BossTransitionState : State
 {
     private BossStateMachine bossContext;
-    public BossPhaseOneIntroState(BossStateMachine currentContext) : base(currentContext)
+    public BossTransitionState(BossStateMachine currentContext) : base(currentContext)
     {
         bossContext = currentContext;
     }
     public override void EnterState()
-    {   
+    {   Debug.Log("transitioning");
         bossContext.IntroFinished = 0;
+        if (bossContext.CurrentStage == 1)
+        {
+            bossContext.Anim.SetTrigger("phaseOne");
+        } else if (bossContext.CurrentStage == 2)
+        {
+            bossContext.Anim.SetTrigger("phaseTwo");
+        } else
+        {
+            bossContext.Anim.SetTrigger("phaseThree");
+        }
         bossContext.AppliedMovementX = 0f;
         bossContext.AppliedMovementY = 0f;
     }
@@ -19,6 +29,7 @@ public class BossPhaseOneIntroState : State
     public override void ExitState()
     {
         bossContext.IntroFinished = 1;
+        bossContext.IsTransitioning = false;
     }
 
     public override void CheckSwitchStates()

@@ -24,8 +24,7 @@ public class BossHurtState : State
     }
 
     public override void CheckSwitchStates()
-    {
-        if (bossContext.HurtFinished == 1)
+    {   if (bossContext.HurtFinished == 1)
         {
             SwitchState(new BossIdleState(bossContext));
         }

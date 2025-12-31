@@ -873,7 +873,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 721011383080934295, guid: c811212f66276e745b7177f4664bef92, type: 3}
       propertyPath: numStages
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 721011383080934295, guid: c811212f66276e745b7177f4664bef92, type: 3}
       propertyPath: timeInIdle
@@ -1349,7 +1349,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9002506855560837565, guid: c811212f66276e745b7177f4664bef92, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6415749645096660923, guid: c811212f66276e745b7177f4664bef92, type: 3}

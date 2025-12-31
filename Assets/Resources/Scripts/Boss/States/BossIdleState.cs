@@ -9,6 +9,7 @@ public class BossIdleState : State
     }
     public override void EnterState()
     {
+        Debug.Log("entering idle");
         bossContext.Anim.SetBool("isIdle", true);
         bossContext.AppliedMovementX = 0f;
         bossContext.AppliedMovementY = 0f;
@@ -26,6 +27,10 @@ public class BossIdleState : State
 
     public override void CheckSwitchStates()
     {
+        if (bossContext.IsTransitioning)
+        {
+            SwitchState(new BossTransitionState(bossContext));
+        }
         if (bossContext.IsHurt)
         {
             SwitchState(new BossHurtState(bossContext));

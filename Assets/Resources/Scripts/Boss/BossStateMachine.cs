@@ -9,7 +9,7 @@ public class BossStateMachine : StateMachine, IDamageable
     private int currentStage = 1;
     private bool isFlipped = false;
     private bool isHurt = false; 
-    
+    private bool isTransitioning = false;
     private int attackFinished = 0;
     private int hurtFinished = 0;
     private int introFinished = 0;
@@ -18,6 +18,7 @@ public class BossStateMachine : StateMachine, IDamageable
     private float canTakeDamage;
 
     public bool IsHurt{get {return isHurt;} set {isHurt = value;}}
+    public bool IsTransitioning {get {return isTransitioning;} set {isTransitioning = value;}}
     public int AttackFinished {get {return attackFinished; } set {attackFinished = value;}}
     public int HurtFinished {get {return hurtFinished; } set {hurtFinished = value;}}
     public int IntroFinished {get {return introFinished; } set {introFinished = value;}}
@@ -38,7 +39,8 @@ public class BossStateMachine : StateMachine, IDamageable
 
     protected override void EnterBeginningState()
     {
-        currentState = new BossPhaseOneIntroState(this);
+        IsTransitioning = true;
+        currentState = new BossTransitionState(this);
         currentState.EnterState();
     }
     protected override void FaceMovement()
@@ -90,8 +92,20 @@ public class BossStateMachine : StateMachine, IDamageable
             currentStage += 1;
             Debug.Log("entering next stage");
             //insert some way to transition here
+            IsTransitioning = true;
+            Health = 100;
+            damage *= 2;
         }
     }
+
+    void Transition()
+    {
+        Health = 100;
+        damage *= 2;
+        currentState = new BossTransitionState(this);
+        currentState.EnterState();
+    }
+
 
     public bool InRange()
     {

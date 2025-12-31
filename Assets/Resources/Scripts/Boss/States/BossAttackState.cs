@@ -3,17 +3,14 @@ using UnityEngine;
 public class BossAttackState : State
 {
     private BossStateMachine bossContext;
-    private BossStateFactory bossFactory;
-    public BossAttackState(BossStateMachine currentContext, BossStateFactory pFactory) : base(currentContext, pFactory)
+    public BossAttackState(BossStateMachine currentContext) : base(currentContext)
     {
         
         bossContext = currentContext;
-        bossFactory = pFactory;
     }
     public override void EnterState()
     {
         bossContext.AttackFinished = 0;
-        Debug.Log("attacking");
         bossContext.Anim.SetBool("isAttacking", true);
         bossContext.AppliedMovementX = 0f;
     }
@@ -31,12 +28,11 @@ public class BossAttackState : State
     {
         if (bossContext.IsHurt)
         {
-            SwitchState(bossFactory.Hurt());
+            SwitchState(new BossHurtState(bossContext));
         }
         else if (bossContext.AttackFinished == 1)
         {
-            Debug.Log("switching to idle");
-            SwitchState(bossFactory.Idle());
+            SwitchState(new BossIdleState(bossContext));
         }
         
     }

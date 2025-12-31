@@ -1,11 +1,9 @@
 public abstract class State 
 {  protected StateMachine context;
-   protected StateFactory factory;
 
-   public State(StateMachine currentContext, StateFactory sFactory)
+   public State(StateMachine currentContext)
    {
       context = currentContext;
-      factory = sFactory;
    }
    public abstract void EnterState();
    public abstract void UpdateState();

@@ -2,16 +2,13 @@ using UnityEngine;
 public class BossIdleState : State
 {
     private BossStateMachine bossContext;
-    private BossStateFactory bossFactory;
     private float curTime;
-    public BossIdleState(BossStateMachine currentContext, BossStateFactory pFactory) : base(currentContext, pFactory)
+    public BossIdleState(BossStateMachine currentContext) : base(currentContext)
     {
         bossContext = currentContext;
-        bossFactory = pFactory;
     }
     public override void EnterState()
     {
-        Debug.Log("idle");
         bossContext.Anim.SetBool("isIdle", true);
         bossContext.AppliedMovementX = 0f;
         bossContext.AppliedMovementY = 0f;
@@ -31,14 +28,14 @@ public class BossIdleState : State
     {
         if (bossContext.IsHurt)
         {
-            SwitchState(bossFactory.Hurt());
+            SwitchState(new BossHurtState(bossContext));
         }
         else if (curTime > bossContext.TimeInIdle && bossContext.InRange())
         {
-            SwitchState(bossFactory.Attack());
+            SwitchState(new BossAttackState(bossContext));
         } else if (curTime > bossContext.TimeInIdle)
         {   
-            SwitchState(bossFactory.Walk());
+            SwitchState(new BossWalkState(bossContext));
         } 
     }
 }

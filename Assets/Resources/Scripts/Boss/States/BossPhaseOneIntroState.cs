@@ -2,11 +2,9 @@ using UnityEngine;
 public class BossPhaseOneIntroState : State
 {
     private BossStateMachine bossContext;
-    private BossStateFactory bossFactory;
-    public BossPhaseOneIntroState(BossStateMachine currentContext, BossStateFactory pFactory) : base(currentContext, pFactory)
+    public BossPhaseOneIntroState(BossStateMachine currentContext) : base(currentContext)
     {
         bossContext = currentContext;
-        bossFactory = pFactory;
     }
     public override void EnterState()
     {   
@@ -27,7 +25,7 @@ public class BossPhaseOneIntroState : State
     {
         if (bossContext.IntroFinished == 1)
         {
-            SwitchState(bossFactory.Idle());
+            SwitchState(new BossIdleState(bossContext));
         }
     }
 }

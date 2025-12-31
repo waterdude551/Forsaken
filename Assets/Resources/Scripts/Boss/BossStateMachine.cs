@@ -31,7 +31,6 @@ public class BossStateMachine : StateMachine, IDamageable
     {
         base.Init();
         sprite = transform.Find("Sprite");
-        factory = new BossStateFactory(this);
         Health = 100;
         Cooldown = 1f;
         canTakeDamage = 0f; 
@@ -39,7 +38,7 @@ public class BossStateMachine : StateMachine, IDamageable
 
     protected override void EnterBeginningState()
     {
-        currentState = ((BossStateFactory)factory).PhaseOneIntro();
+        currentState = new BossPhaseOneIntroState(this);
         currentState.EnterState();
     }
     protected override void FaceMovement()

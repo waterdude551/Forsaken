@@ -3,11 +3,9 @@ using UnityEngine;
 public class PlayerWalkState : State
 {
     private PlayerStateMachine playerContext;
-    private PlayerStateFactory playerFactory;
-    public PlayerWalkState(PlayerStateMachine currentContext, PlayerStateFactory pFactory) : base(currentContext, pFactory)
+    public PlayerWalkState(PlayerStateMachine currentContext) : base(currentContext)
     {
         playerContext = currentContext;
-        playerFactory = pFactory;
     }
     public override void EnterState()
     {
@@ -29,21 +27,21 @@ public class PlayerWalkState : State
     {
         if (playerContext.IsHurt)
         {
-            SwitchState(playerFactory.Hurt());
+            SwitchState(new PlayerHurtState(playerContext));
         }
         else if (playerContext.IsHitPressed)
         {
-            SwitchState(playerFactory.Attack());
+            SwitchState(new PlayerAttackState(playerContext));
         } else if (playerContext.Grounded && playerContext.IsJumpPressed)
         {
-            SwitchState(playerFactory.Jump());
+            SwitchState(new PlayerJumpState(playerContext));
         } 
         else if (!playerContext.IsMovementPressed )
         {
-            SwitchState(playerFactory.Idle());
+            SwitchState(new PlayerIdleState(playerContext));
         } else if (playerContext.IsMovementPressed && playerContext.IsRunPressed)
         {   
-            SwitchState(playerFactory.Run());
+            SwitchState(new PlayerRunState(playerContext));
         }
     }
 }

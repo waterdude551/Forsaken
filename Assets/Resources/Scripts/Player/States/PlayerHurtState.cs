@@ -2,11 +2,9 @@ using UnityEngine;
 public class PlayerHurtState : State
 {
     private PlayerStateMachine playerContext;
-    private PlayerStateFactory playerFactory;
-    public PlayerHurtState(PlayerStateMachine currentContext, PlayerStateFactory pFactory) : base(currentContext, pFactory)
+    public PlayerHurtState(PlayerStateMachine currentContext) : base(currentContext)
     {
         playerContext = currentContext;
-        playerFactory = pFactory;
     }
     public override void EnterState()
     {
@@ -33,17 +31,17 @@ public class PlayerHurtState : State
         playerContext.HurtFinished = false;
         if (playerContext.IsHitPressed)
         {
-            SwitchState(playerFactory.Attack());
+            SwitchState(new PlayerAttackState(playerContext));
         }
         else if (playerContext.IsMovementPressed && playerContext.IsRunPressed)
         {
-            SwitchState(playerFactory.Run());
+            SwitchState(new PlayerRunState(playerContext));
         } else if (playerContext.IsMovementPressed)
         {   
-            SwitchState(playerFactory.Walk());
+            SwitchState(new PlayerWalkState(playerContext));
         } else
         {
-            SwitchState(playerFactory.Idle());
+            SwitchState(new PlayerIdleState(playerContext));
         }
     }
 }

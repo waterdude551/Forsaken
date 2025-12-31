@@ -14,7 +14,6 @@ public abstract class StateMachine : MonoBehaviour
 
     //States
     protected State currentState;
-    protected StateFactory factory;
 
     //getters and settesr
     public State CurrentState {get {return currentState; } set {currentState = value;}}

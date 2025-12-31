@@ -2,15 +2,12 @@ using UnityEngine;
 public class BossWalkState : State
 {
     private BossStateMachine bossContext;
-    private BossStateFactory bossFactory;
-    public BossWalkState(BossStateMachine currentContext, BossStateFactory pFactory) : base(currentContext, pFactory)
+    public BossWalkState(BossStateMachine currentContext) : base(currentContext)
     {
         bossContext = currentContext;
-        bossFactory = pFactory;
     }
     public override void EnterState()
     {
-        Debug.Log("walking");
         bossContext.Anim.SetBool("isWalking", true);
         Debug.Log(bossContext.Anim.GetBool("isWalking"));
         
@@ -21,7 +18,6 @@ public class BossWalkState : State
         Vector3 currentPos = new Vector3(bossContext.RB.gameObject.transform.position.x, bossContext.RB.gameObject.transform.position.y, 0f);
         Vector3 direction = (target - currentPos).normalized;
         bossContext.AppliedMovementX = direction.x * bossContext.MoveSpeed;
-        
         
         CheckSwitchStates();
     }
@@ -34,11 +30,11 @@ public class BossWalkState : State
     {
         if (bossContext.IsHurt)
         {
-            SwitchState(bossFactory.Hurt());
+            SwitchState(new BossHurtState(bossContext));
         }
         else if (bossContext.InRange())
         {
-            SwitchState(bossFactory.Attack());
+            SwitchState(new BossAttackState(bossContext));
         }
     }
 }

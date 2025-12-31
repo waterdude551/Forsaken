@@ -42,7 +42,6 @@ public class PlayerStateMachine : StateMachine, IDamageable
 
         //set reference variables
         playerInput = new PlayerInput();
-        factory = new PlayerStateFactory(this);
 
         //set player input callbacks
         playerInput.CharacterControls.Move.started += OnMovementPerformed;
@@ -62,7 +61,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
 
     protected override void EnterBeginningState()
     {
-        currentState = factory.Idle();
+        currentState = new PlayerIdleState(this);
         currentState.EnterState();
     }
 

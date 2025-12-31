@@ -19,7 +19,6 @@ public class BossHurtState : State
     }
     public override void ExitState()
     {
-        bossContext.HurtFinished = 0;
         bossContext.IsHurt = false;
         bossContext.Anim.SetBool("isHurt", false);
     }
@@ -28,7 +27,6 @@ public class BossHurtState : State
     {
         if (bossContext.HurtFinished == 1)
         {
-            
             SwitchState(new BossIdleState(bossContext));
         }
         

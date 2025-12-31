@@ -5,6 +5,7 @@ public class BossStateMachine : StateMachine, IDamageable
     [SerializeField] private  float timeInIdle;
     [SerializeField] private  int numStages;
     [SerializeField] private  int damage;
+    [SerializeField] private float damageCooldown;
     private int currentStage = 1;
     private bool isFlipped = false;
     private bool isHurt = false; 
@@ -13,7 +14,7 @@ public class BossStateMachine : StateMachine, IDamageable
     private int hurtFinished = 0;
     private int introFinished = 0;
     private int health;
-    private float damageCooldown;
+    
     private float canTakeDamage;
 
     public bool IsHurt{get {return isHurt;} set {isHurt = value;}}
@@ -32,7 +33,6 @@ public class BossStateMachine : StateMachine, IDamageable
         base.Init();
         sprite = transform.Find("Sprite");
         Health = 100;
-        Cooldown = 1f;
         canTakeDamage = 0f; 
     }
 
@@ -65,13 +65,12 @@ public class BossStateMachine : StateMachine, IDamageable
 
     public void ApplyDamage(int damage)
     {
-        if (Time.time > canTakeDamage)
+        if (Time.time > canTakeDamage && IntroFinished == 1)
         {
             canTakeDamage = Time.time + Cooldown;
             Health -= damage;
             Debug.Log("Enemy Health: " + Health);
             IsHurt = true;
-
         }
         if (Health <= 0f)
         {

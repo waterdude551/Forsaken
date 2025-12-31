@@ -18,7 +18,7 @@ public class BossPhaseOneIntroState : State
     }
     public override void ExitState()
     {
-        bossContext.IntroFinished = 0;
+        bossContext.IntroFinished = 1;
     }
 
     public override void CheckSwitchStates()

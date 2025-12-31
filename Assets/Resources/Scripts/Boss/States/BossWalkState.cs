@@ -9,7 +9,6 @@ public class BossWalkState : State
     public override void EnterState()
     {
         bossContext.Anim.SetBool("isWalking", true);
-        Debug.Log(bossContext.Anim.GetBool("isWalking"));
         
     }
     public override void UpdateState()

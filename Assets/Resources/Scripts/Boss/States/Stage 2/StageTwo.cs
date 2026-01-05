@@ -12,7 +12,12 @@ public class StageTwo : State
     }
     public override void InitializeSubStates()
     {
-        if (bossContext.IsHurt)
+        if (bossContext.IsGrappling)
+        {
+            Debug.Log("Setting Grapple State");
+            SetSubState(new BossGrappleState(bossContext));
+        }
+        else if (bossContext.IsHurt)
         {
             SetSubState(new BossHurtState(bossContext));
         }
@@ -26,6 +31,7 @@ public class StageTwo : State
     }
     public override void EnterState()
     {
+        bossContext.IsGrappling = true;
     }
     public override void UpdateState()
     {

@@ -6,10 +6,13 @@ public class BossStateMachine : StateMachine, IDamageable
     [SerializeField] private  int numStages;
     [SerializeField] private  int damage;
     [SerializeField] private float damageCooldown;
+    [SerializeField] private float grappleDuration;
+    [SerializeField] private float grappleSpeed;
     private int currentStage = 1;
     private bool isFlipped = false;
     private bool isHurt = false; 
     private bool isTransitioning = false;
+    private bool isGrappling = false;
     private int attackFinished = 0;
     private int hurtFinished = 0;
     private int introFinished = 0;
@@ -19,6 +22,7 @@ public class BossStateMachine : StateMachine, IDamageable
 
     public bool IsHurt{get {return isHurt;} set {isHurt = value;}}
     public bool IsTransitioning {get {return isTransitioning;} set {isTransitioning = value;}}
+    public bool IsGrappling {get {return isGrappling;} set {isGrappling = value;}}
     public int AttackFinished {get {return attackFinished; } set {attackFinished = value;}}
     public int HurtFinished {get {return hurtFinished; } set {hurtFinished = value;}}
     public int IntroFinished {get {return introFinished; } set {introFinished = value;}}
@@ -27,6 +31,8 @@ public class BossStateMachine : StateMachine, IDamageable
     public float Cooldown {get {return damageCooldown;} set {damageCooldown = value;}}
     public float TimeInIdle {get {return timeInIdle;}}
     public float TargetDistance {get {return targetDistance;}}
+    public float GrappleDuration {get {return grappleDuration;}}
+    public float GrappleSpeed {get {return grappleSpeed;}}
     public int CurrentStage {get {return currentStage;} set {currentStage = value;}}
 
     protected override void Init()

@@ -64,6 +64,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
     public bool DashFinished {get {return dashFinished; } set {dashFinished = value;}}
     public bool IsDashing {get {return isDashing; } set {isDashing = value;}}
     public int CurrentDashMeter {get {return currentDashMeter;} set {currentDashMeter = value;}}
+    public bool DashUnlocked {get {return dashUnlocked;}}
     public bool CanDash {get {return dashUnlocked && currentDashMeter >= dashMeter;}}
     public bool HurtFinished {get {return hurtFinished; } set {hurtFinished = value;}}
     public bool Grounded {get {return grounded;} set {grounded = value;}}

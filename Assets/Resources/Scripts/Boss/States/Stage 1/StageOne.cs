@@ -12,11 +12,7 @@ public class StageOne : State
     }
     public override void InitializeSubStates()
     {
-        if (bossContext.IsHurt)
-        {
-            SetSubState(new BossHurtState(bossContext));
-        }
-        else if (bossContext.InRange())
+        if (bossContext.InRange())
         {
             SetSubState(new BossAttackState(bossContext));
         } else

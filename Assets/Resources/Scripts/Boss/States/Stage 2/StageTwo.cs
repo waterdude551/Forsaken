@@ -16,10 +16,6 @@ public class StageTwo : State
         {
             SetSubState(new BossGrappleState(bossContext));
         }
-        else if (bossContext.IsHurt)
-        {
-            SetSubState(new BossHurtState(bossContext));
-        }
         else if (bossContext.InRange())
         {
             SetSubState(new BossAttackState(bossContext));

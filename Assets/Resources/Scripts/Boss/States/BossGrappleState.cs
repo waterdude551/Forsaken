@@ -40,11 +40,7 @@ public class BossGrappleState : State
 
     public override void CheckSwitchStates()
     {
-        if (bossContext.IsHurt)
-        {
-            SwitchState(new BossHurtState(bossContext));
-        }
-        else if (bossContext.GrapplingFinished == 1)
+        if (bossContext.GrapplingFinished == 1)
         {
             SwitchState(new BossAttackState(bossContext));
         }

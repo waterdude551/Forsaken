@@ -6,7 +6,6 @@ public class BossTransitionState : State
     {
         bossContext = currentContext;
         isBaseState = true;
-        bossContext.IsHurt = false;
     }
     public override void EnterState()
     {   

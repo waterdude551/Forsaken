@@ -16,7 +16,6 @@ public class BossStateMachine : StateMachine, IDamageable
     private int currentStage = 1;
     private bool fightStarted = false;
     private bool isFlipped = false;
-    private bool isHurt = false; 
     private bool isTransitioning = false;
     private int grapplingFinished = 0;
     private int attackFinished = 0;
@@ -24,8 +23,6 @@ public class BossStateMachine : StateMachine, IDamageable
     private int introFinished = 0;
     private int health;
     
-
-    public bool IsHurt{get {return isHurt;} set {isHurt = value;}}
     public bool FightStarted{get {return fightStarted;}}
     public bool IsTransitioning {get {return isTransitioning;} set {isTransitioning = value;}}
     public int GrapplingFinished {get {return grapplingFinished;} set {grapplingFinished = value;}}
@@ -94,11 +91,12 @@ public class BossStateMachine : StateMachine, IDamageable
             Health -= damage;
             Debug.Log("Enemy Health: " + Health);
             sprite.GetComponent<DamageFlash>().BeginFlash();
-            if (!player.gameObject.GetComponent<PlayerStateMachine>().IsDashing)
+            if (!player.gameObject.GetComponent<PlayerStateMachine>().IsDashing && player.gameObject.GetComponent<PlayerStateMachine>().DashUnlocked)
             {
                 player.gameObject.GetComponent<PlayerStateMachine>().CurrentDashMeter += 1;
+                Debug.Log("dash meter is: " + player.gameObject.GetComponent<PlayerStateMachine>().CurrentDashMeter);
             }
-            Debug.Log("dash meter is: " + player.gameObject.GetComponent<PlayerStateMachine>().CurrentDashMeter);
+            
         }
         if (Health <= 0f)
         {

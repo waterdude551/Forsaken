@@ -11,6 +11,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
 
     [Header("Object References")]
     [SerializeField] private GameManager manager;
+    private GameObject sword;
 
     //player input system
     private PlayerInput playerInput;
@@ -89,6 +90,8 @@ public class PlayerStateMachine : StateMachine, IDamageable
         playerInput = new PlayerInput();
         dashTrail = transform.Find("ghost trail").gameObject;
         dashArrow = transform.Find("dash arrow").gameObject;
+        sword = sprite.transform.Find("sword").Find("sword trail tracker").gameObject;
+        Debug.Log(sword == null);
         groundCheck = transform.Find("groundedCheck");
 
         //set player input callbacks
@@ -210,10 +213,17 @@ public class PlayerStateMachine : StateMachine, IDamageable
     void OnAttackAnimationStart()
     {
         AttackFinished = false;
+
+    }
+    void OnAttackAnimationClimax()
+    {
+        sword.SetActive(true);
+
     }
     void OnAttackAnimationFinish()
     {
         AttackFinished = true;
+        sword.SetActive(false);
     }
 
     void OnShootAnimationStart()

@@ -1,10 +1,12 @@
 using UnityEngine;
 public class BossStateMachine : StateMachine, IDamageable
 {
+    [Header("Object References")]
+    [SerializeField] private GameManager manager;
+
+    [Header("Attack Controls")]
     [SerializeField] private  float targetDistance;
     [SerializeField] private  float timeInIdle;
-    
-    [SerializeField] private  int numStages;
     [SerializeField] private  int damage;
     [SerializeField] private float damageCooldown;
 
@@ -13,18 +15,16 @@ public class BossStateMachine : StateMachine, IDamageable
     [SerializeField] private float grappleDuration;
     [SerializeField] private float grappleSpeed;
 
-    private int currentStage = 1;
-    private bool fightStarted = false;
+    
     private bool isFlipped = false;
-    private bool isTransitioning = false;
     private int grapplingFinished = 0;
     private int attackFinished = 0;
     private int hurtFinished = 0;
     private int introFinished = 0;
     private int health;
     
-    public bool FightStarted{get {return fightStarted;}}
-    public bool IsTransitioning {get {return isTransitioning;} set {isTransitioning = value;}}
+    public bool FightStarted {get {return manager.FightStarted;}}
+    public bool IsTransitioning {get {return manager.IsTransitioning;} set {manager.IsTransitioning = value;}}
     public int GrapplingFinished {get {return grapplingFinished;} set {grapplingFinished = value;}}
     public int AttackFinished {get {return attackFinished; } set {attackFinished = value;}}
     public int HurtFinished {get {return hurtFinished; } set {hurtFinished = value;}}
@@ -37,7 +37,7 @@ public class BossStateMachine : StateMachine, IDamageable
     public float GrappleDuration {get {return grappleDuration;}}
     public float GrappleSpeed {get {return grappleSpeed;}}
     public float GrappleTargetDistance {get {return grappleTargetDistance;}}
-    public int CurrentStage {get {return currentStage;} set {currentStage = value;}}
+    public int CurrentStage {get {return manager.CurrentStage;} set {manager.CurrentStage = value;}}
 
     protected override void Init()
     {
@@ -86,7 +86,7 @@ public class BossStateMachine : StateMachine, IDamageable
 
     public void ApplyDamage(int damage)
     {
-        if (IntroFinished == 1 && fightStarted)
+        if (IntroFinished == 1 && manager.FightStarted)
         {
             Health -= damage;
             Debug.Log("Enemy Health: " + Health);
@@ -100,29 +100,10 @@ public class BossStateMachine : StateMachine, IDamageable
         }
         if (Health <= 0f)
         {
-            CheckWinStatus();
+            manager.CheckWinStatus();
         }
     }
 
-    void CheckWinStatus()
-    {
-        if (currentStage == numStages)
-        {
-            Debug.Log("You Win!");
-            Time.timeScale = 0f;
-        }
-        else
-        {
-            currentStage += 1;
-            Debug.Log("entering next stage");
-            //insert some way to transition here
-            IsTransitioning = true;
-            Health = 100;
-            Damage *= 2;
-            MoveSpeed *= 1.5f;
-            player.gameObject.GetComponent<PlayerStateMachine>().UnlockAbility(currentStage);
-        }
-    }
 
 
     public bool InRange()
@@ -135,10 +116,6 @@ public class BossStateMachine : StateMachine, IDamageable
         return Vector2.Distance(transform.position, Player.transform.position) > GrappleTargetDistance;
     }
 
-    public void BeginBattle()
-    {
-        IsTransitioning = true;
-        fightStarted = true;
-    }
+    
 
 }

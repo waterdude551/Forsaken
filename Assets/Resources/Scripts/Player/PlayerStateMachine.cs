@@ -3,11 +3,14 @@ using UnityEngine.InputSystem;
 public class PlayerStateMachine : StateMachine, IDamageable
 {
     //control variables
+    [Header("Movement Control Variables")]
     [SerializeField] private  float runSpeed = 7f;
     [SerializeField] private float jumpForce = 20f;
     [SerializeField] private float dashForce = 30f;
     [SerializeField] private int dashMeter = 10;
 
+    [Header("Object References")]
+    [SerializeField] private GameManager manager;
 
     //player input system
     private PlayerInput playerInput;
@@ -29,7 +32,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
     private bool dashFinished = false;
     private bool isDashing = false;
     private bool hurtFinished = false;
-    [SerializeField] private bool grounded = true;
+    private bool grounded = true;
 
     //player info
     private int health;
@@ -43,6 +46,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
     private Transform groundCheck;
 
     //getters and settesr
+    public GameManager Manager {get {return manager;}}
     public bool CanMove {get {return canMove;} set {canMove = value;}}
     public bool IsMovementPressed {get {return isMovementPressed;} set {isMovementPressed = value;}}
     public bool IsRunPressed {get {return isRunPressed;} set {isRunPressed = value;}}
@@ -86,6 +90,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
         dashTrail = transform.Find("ghost trail").gameObject;
         dashArrow = transform.Find("dash arrow").gameObject;
         groundCheck = transform.Find("groundedCheck");
+
         //set player input callbacks
         playerInput.CharacterControls.Move.started += OnMovementPerformed;
         playerInput.CharacterControls.Move.canceled += OnMovementCancelled;
@@ -174,12 +179,12 @@ public class PlayerStateMachine : StateMachine, IDamageable
         
     }
 
-    void OnEnable()
+    public void OnEnable()
     {
         playerInput.CharacterControls.Enable();
     }
 
-    void OnDisable()
+    public void OnDisable()
     {
         playerInput.CharacterControls.Disable();
     }
@@ -196,16 +201,11 @@ public class PlayerStateMachine : StateMachine, IDamageable
 
         if (Health <= 0f)
         {
-            Debug.Log("You Lost!");
-            Time.timeScale = 0f;
+            manager.CheckWinStatus();
         }
        
     }
 
-    public void SetTimeScale(float scale)
-    {
-        Time.timeScale = scale;
-    }
 
     void OnAttackAnimationStart()
     {

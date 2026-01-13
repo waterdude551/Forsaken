@@ -56,6 +56,12 @@ public abstract class StateMachine : MonoBehaviour
         rb.linearVelocity = appliedMovement;
     }
 
+    public void JumpToState(State state)
+    {
+        currentState = state;
+        currentState.EnterStates();
+    }
+
     protected virtual void FaceMovement()
     {
         if (rb.linearVelocity.x != 0)

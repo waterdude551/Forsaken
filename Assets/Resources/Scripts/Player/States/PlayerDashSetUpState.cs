@@ -10,7 +10,7 @@ public class PlayerDashSetUpState : State
     public override void EnterState()
     {
         playerContext.DashArrow.SetActive(true);
-        playerContext.SetTimeScale(0.5f);
+        playerContext.Manager.SetTimeScale(0.5f);
         playerContext.AppliedMovementX = 0f;
         playerContext.AppliedMovementY = 0f;
     }
@@ -20,7 +20,7 @@ public class PlayerDashSetUpState : State
     }
     public override void ExitState()
     {
-        playerContext.SetTimeScale(1f);
+        playerContext.Manager.SetTimeScale(1f);
     }
 
     public override void CheckSwitchStates()

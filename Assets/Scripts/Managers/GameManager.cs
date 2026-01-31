@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
         }
         else if (playerStateMachine.Health <= 0)
         {
-            gameOver = true;;
+            gameOver = true;
             playerStateMachine.OnDisable();
             cutsceneManager.PlayCutScene(0);
         } else {

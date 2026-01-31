@@ -6788,12 +6788,20 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 721011383080934295, guid: c811212f66276e745b7177f4664bef92, type: 3}
+      propertyPath: dashCD
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 721011383080934295, guid: c811212f66276e745b7177f4664bef92, type: 3}
       propertyPath: manager
       value: 
       objectReference: {fileID: 1576479053}
     - target: {fileID: 721011383080934295, guid: c811212f66276e745b7177f4664bef92, type: 3}
       propertyPath: stunTime
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 721011383080934295, guid: c811212f66276e745b7177f4664bef92, type: 3}
+      propertyPath: dashRange
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 721011383080934295, guid: c811212f66276e745b7177f4664bef92, type: 3}
       propertyPath: m_Enabled

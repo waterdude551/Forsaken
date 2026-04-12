@@ -1,23 +1,33 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using TMPro;
 
-public class PlayerStateMachine : StateMachine, IDamageable
+public class PlayerStateMachine : StateMachine, IDamageable, ISetDifficulty
 {   
     #region SerializableElements
     [Header("Movement Control Variables")]
     [SerializeField] private  float runSpeed = 7f;
     [SerializeField] private float jumpForce = 20f;
     [SerializeField] private float slashForce = 30f;
+    [SerializeField] private float recoilForce = 30f;
     [SerializeField] private float dashSpeed = 15f;
     [SerializeField] private float dashDistance = 5f;
     [SerializeField] private float parryTiming = 2.5f;
     [SerializeField] private float parryCooldown = 2.5f;
+    [SerializeField] private float maxEnergy = 100f;
+    [SerializeField] private float dashCost = 10f;
+    [SerializeField] private float shootCost = 10f;
+    [SerializeField] private float attackGain = 10f;
 
     [Header("Object References")]
     [SerializeField] private GameManager manager;
     [SerializeField] private BoxCollider2D swordHitbox;
+    [SerializeField] private TextMeshProUGUI healthBar;
+    [SerializeField] private TextMeshProUGUI dashBar;
+    [SerializeField] private GameObject shootIcon;
+    [SerializeField] private Image energyFill;
     [SerializeField]private DialogueUI dialogueUI;
     public DialogueUI DialogueUI => dialogueUI;
 
@@ -59,6 +69,8 @@ public class PlayerStateMachine : StateMachine, IDamageable
     private float damageCooldown;
     private float canTakeDamage;
     #endregion
+
+    private float currentEnergy;
 
     #region VFX Items
     //additional game objects
@@ -128,6 +140,10 @@ public class PlayerStateMachine : StateMachine, IDamageable
     public GameObject DashTrail {get {return dashTrail;}}
     public BoxCollider2D SwordHitbox {get {return swordHitbox;}}
     public Player_Ranged RangedWeapon { get { return rangedWeapon; } }
+    public float Energy {get {return currentEnergy;} set {currentEnergy = value;}}
+    public float DashCost {get {return dashCost;}}
+    public float ShootCost {get {return shootCost;}}
+    public float AttackGain {get {return attackGain;}}
     #endregion
 
     #region StateMachine Updates
@@ -159,8 +175,10 @@ public class PlayerStateMachine : StateMachine, IDamageable
         playerInput.CharacterControls.Interact.canceled += OnInteractPressed;
 
         Health = 100;
+        Energy = maxEnergy;
         Cooldown = 3f;
         canTakeDamage = 0f; 
+        energyFill.fillAmount = 1;
     }
 
     protected override void EnterBeginningState()
@@ -191,7 +209,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
 
     protected override void FaceMovement()
     {
-        if (IsMovementPressed)
+        if (Mathf.Abs(rb.linearVelocity.x) > 0.05f)
         {
             sprite.localScale = new Vector3(Mathf.Sign(rb.linearVelocity.x), 1, 1);
         }
@@ -201,6 +219,7 @@ public class PlayerStateMachine : StateMachine, IDamageable
         if (isBlocking && canParry)
         {
             StartParry();
+            ApplyRecoil(new Vector3(sprite.localScale.x * -1 * recoilForce, 0f, 0f));
             return;
         }
         if (Time.time > canTakeDamage && !IsParrying)
@@ -229,6 +248,17 @@ public class PlayerStateMachine : StateMachine, IDamageable
             canDash = true;
             Debug.Log("you can now shoot! press shift to launch yourself!");
         }
+    }
+
+    public void ApplyRecoil(Vector3 force)
+    {
+        rb.AddForce(force, ForceMode2D.Impulse);
+    }
+    public void updateEnergy(float amount)
+    {
+        currentEnergy += amount;
+        currentEnergy = Mathf.Clamp(currentEnergy, 0, maxEnergy);
+        energyFill.fillAmount = currentEnergy / maxEnergy;
     }
     #endregion
     
@@ -378,8 +408,11 @@ public class PlayerStateMachine : StateMachine, IDamageable
         ShootFinished = false;
     }
     void TriggerBulletShooting()
-    {
+    {   
+        if (Energy < 10) {return;}
         ShootStarted = true;
+        updateEnergy(-shootCost);
+           
     }
     void OnShootAnimationFinish()
     {
@@ -396,4 +429,23 @@ public class PlayerStateMachine : StateMachine, IDamageable
         HurtFinished = true;
     }
     #endregion
+    
+    public void HandleDifficulty(Difficulty difficulty)
+    {
+        switch (difficulty)
+        {
+            case Difficulty.Easy:
+                Health = 200;
+                Cooldown = 6f;
+                break;
+            case Difficulty.Normal:
+                Health = 100;
+                Cooldown = 3f;
+                break;
+            case Difficulty.Hard:
+                Health = 50;
+                Cooldown = 1.5f;
+                break;
+        }
+    }
 }
